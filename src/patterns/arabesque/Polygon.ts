@@ -24,9 +24,9 @@ export class Polygon {
     return this
   }
 
-  private createHankins() {
+  private createHankins(delta: number) {
     this.edges.forEach((edge, i) => {
-      edge.createHankins()
+      edge.createHankins(delta)
     })
 
     const edgesCount = this.edges.length
@@ -39,8 +39,8 @@ export class Polygon {
     }
   }
 
-  showHankins() {
-    this.createHankins()
+  showHankins(delta: number) {
+    this.createHankins(delta)
 
     this.edges.forEach((edge, i) => {
       edge.showHankins()

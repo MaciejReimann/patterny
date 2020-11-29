@@ -8,6 +8,7 @@ import { dot } from "../../lib/wrappers"
 export class Arabesque {
   draw(fabricCanvas: any) {
     const draw = add(fabricCanvas)
+    console.log(fabricCanvas)
 
     // draw.edge({ x: 250, y: 125 }, { x: 250, y: 175 })
 
@@ -18,7 +19,7 @@ export class Arabesque {
     polygon.addVertex(100, 200)
     polygon.close()
     polygon.show()
-    polygon.showHankins()
+    polygon.showHankins(10)
 
     polygon.edges.forEach((edge) => {
       const point = edge.hankin1?.end

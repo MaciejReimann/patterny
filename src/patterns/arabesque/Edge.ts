@@ -23,18 +23,33 @@ export class Edge {
     this.canvas.add(this.line)
   }
 
-  createHankins(angle?: number) {
+  createHankins(delta: number, angle?: number) {
     const rotation = angle || 60
     const middlePoint = p5.Vector.add(this.startPoint, this.endPoint)
     middlePoint.mult(0.5)
 
     const v1 = p5.Vector.sub(this.startPoint, middlePoint)
     const v2 = p5.Vector.sub(this.endPoint, middlePoint)
+
+    let offset1 = middlePoint
+    let offset2 = middlePoint
+
+    if (delta > 0) {
+      // TODO: delta can be < 0 -> what happens then?
+      v1.setMag(delta)
+      v2.setMag(delta)
+      offset1 = p5.Vector.add(middlePoint, v2)
+      offset2 = p5.Vector.add(middlePoint, v1)
+    }
+
+    // v1.normalize()
+    // v2.normalize()
+
     v1.rotate(radians(-rotation))
     v2.rotate(radians(rotation))
 
-    this.hankin1 = new Hankin(middlePoint, v1, this.canvas)
-    this.hankin2 = new Hankin(middlePoint, v2, this.canvas)
+    this.hankin1 = new Hankin(offset1, v1, this.canvas)
+    this.hankin2 = new Hankin(offset2, v2, this.canvas)
   }
 
   findEnds(edge: Edge) {
