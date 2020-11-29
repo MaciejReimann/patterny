@@ -11,15 +11,14 @@ export class Arabesque {
 
     // draw.edge({ x: 250, y: 125 }, { x: 250, y: 175 })
 
-    const polygon = draw
-      .polygon()
-      .addVertex(100, 100)
-      .addVertex(200, 100)
-      .addVertex(200, 200)
-      .addVertex(100, 200)
-      .close()
-      .showHankin()
-      .show()
+    const polygon = new Polygon(fabricCanvas)
+    polygon.addVertex(100, 100)
+    polygon.addVertex(200, 100)
+    polygon.addVertex(200, 200)
+    polygon.addVertex(100, 200)
+    polygon.close()
+    polygon.show()
+    polygon.showHankins()
 
     polygon.edges.forEach((edge) => {
       const point = edge.hankin1?.end

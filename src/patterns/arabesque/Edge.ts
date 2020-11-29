@@ -23,7 +23,7 @@ export class Edge {
     this.canvas.add(this.line)
   }
 
-  hankin(angle?: number) {
+  createHankins(angle?: number) {
     const rotation = angle || 60
     const middlePoint = p5.Vector.add(this.startPoint, this.endPoint)
     middlePoint.mult(0.5)
@@ -44,8 +44,7 @@ export class Edge {
     this.hankin2 && edge.hankin2 && this.hankin2.findEnd(edge.hankin2)
   }
 
-  showHankin() {
-    this.hankin(70)
+  showHankins() {
     this.hankin1?.show()
     this.hankin2?.show()
   }

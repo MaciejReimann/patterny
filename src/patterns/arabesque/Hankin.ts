@@ -18,19 +18,29 @@ export class Hankin {
   }
 
   show() {
-    const line = makeLine([this.a.x, this.a.y, this.b.x, this.b.y])
-    this.canvas.add(line)
+    try {
+      const line =
+        this.end && makeLine([this.a.x, this.a.y, this.end.x, this.end.y])
+      this.canvas.add(line)
+    } catch (e) {
+      throw new Error(
+        "Hankin cannot be shown before its end is assigned a value"
+      )
+    }
   }
 
   findEnd(hankin: Hankin) {
     const denominator = hankin.v.y * this.v.x - hankin.v.x * this.v.y
+
     const numerator_a =
       hankin.v.x * (this.a.y - hankin.a.y) -
       hankin.v.y * (this.a.x - hankin.a.x)
     const numerator_b =
       this.v.x * (this.a.y - hankin.a.y) - this.v.y * (this.a.x - hankin.a.x)
+
     const u_a = numerator_a / denominator
     const u_b = numerator_b / denominator
+
     const intersectionPoint_x = this.a.x + u_a * this.v.x
     const intersectionPoint_y = this.a.y + u_a * this.v.y
 

@@ -24,15 +24,28 @@ export class Polygon {
     return this
   }
 
-  showHankin() {
+  private createHankins() {
     this.edges.forEach((edge, i) => {
-      edge.showHankin()
+      edge.createHankins()
     })
+
+    const edgesCount = this.edges.length
+    for (let i = 0; i < edgesCount; i++) {
+      for (let j = 0; j < edgesCount; j++) {
+        if (i !== j) {
+          this.edges[i].findEnds(this.edges[j])
+        }
+      }
+    }
+  }
+
+  showHankins() {
+    this.createHankins()
+
     this.edges.forEach((edge, i) => {
-      edge.findEnds(
-        i === 0 ? this.edges[this.edges.length - 1] : this.edges[i - 1]
-      )
+      edge.showHankins()
     })
+
     return this
   }
 
