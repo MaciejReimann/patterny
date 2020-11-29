@@ -1,26 +1,11 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { Arabesque } from "./patterns/arabesque/Arabesque"
+
+import { Canvas } from "./components/canvas/Canvas"
+
+export const App = () => {
+  const arabesque = new Arabesque()
+
+  return <Canvas width={600} height={600} callback={arabesque.draw} />
 }
-
-export default App;
