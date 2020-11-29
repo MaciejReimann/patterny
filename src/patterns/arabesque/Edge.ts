@@ -24,7 +24,7 @@ export class Edge {
   }
 
   createHankins(delta: number, angle?: number) {
-    const rotation = angle || 60
+    const rotation = angle || 70
     const middlePoint = p5.Vector.add(this.startPoint, this.endPoint)
     middlePoint.mult(0.5)
 

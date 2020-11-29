@@ -1,17 +1,11 @@
 import p5 from "p5"
 
-import { Edge } from "./Edge"
 import { Polygon } from "./Polygon"
 
 import { dot } from "../../lib/wrappers"
 
 export class Arabesque {
   draw(fabricCanvas: any) {
-    const draw = add(fabricCanvas)
-    console.log(fabricCanvas)
-
-    // draw.edge({ x: 250, y: 125 }, { x: 250, y: 175 })
-
     const polygon = new Polygon(fabricCanvas)
     polygon.addVertex(100, 100)
     polygon.addVertex(200, 100)
@@ -27,18 +21,25 @@ export class Arabesque {
       point && fabricCanvas.add(dot(point.x, point.y))
     })
   }
-}
 
-function add(canvas: any) {
-  const edge = (startPoint: p5.Vector, endPoint: p5.Vector) =>
-    new Edge(startPoint, endPoint, canvas).show()
+  fillCanvas = (res: number = 100) => (fabricCanvas: any) => {
+    const xCount = Math.ceil(fabricCanvas.width / res)
+    const yCount = Math.ceil(fabricCanvas.height / res)
 
-  const polygon = () => new Polygon(canvas)
+    console.log("xCount", xCount)
+    console.log("yCount", yCount)
 
-  return {
-    edge,
-    polygon,
+    for (let x = 0; x < fabricCanvas.width; x += res) {
+      for (let y = 0; y < fabricCanvas.height; y += res) {
+        const polygon = new Polygon(fabricCanvas)
+        polygon.addVertex(x - 1, y - 1)
+        polygon.addVertex(x + res - 1, y - 1)
+        polygon.addVertex(x + res - 1, y + res - 1)
+        polygon.addVertex(x - 1, y - 1 + res)
+        polygon.close()
+        // polygon.show()
+        polygon.showHankins(10, 70)
+      }
+    }
   }
 }
-
-function myApp(fabricCanvas: any) {}
