@@ -41,7 +41,7 @@ type GridCoords = number[][][]
 export class GridCell<GenericCellElement> {
   x: number
   y: number
-  element: GenericCellElement | null = null
+  element: GenericCellElement
 
   constructor(
     private grid: RectangularGrid<GenericCellElement>,
