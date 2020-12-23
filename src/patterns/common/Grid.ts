@@ -11,7 +11,7 @@ export class RectangularGrid<GenericCellElement> {
     readonly x: number,
     readonly y: number
   ) {
-    const grid = make2DArray(x, y)
+    const grid = make2DArray(x + 1, y + 1)
     this.cells = grid.map((row) =>
       row.map(
         (cell) =>
@@ -30,11 +30,9 @@ export class RectangularGrid<GenericCellElement> {
   }
 
   getCell(x: number, y: number): GridCell<GenericCellElement> | null {
-    try {
-      return this.cells[x][y]
-    } catch (e) {
-      return null
-    }
+    const cellX = this.cells[x]
+    const cell = cellX ? cellX[y] : null
+    return cell ? cell : null
   }
 }
 
@@ -58,7 +56,6 @@ export class GridCell<GenericCellElement> {
 
   getRight() {
     const cell = this.grid.getCell(this.x + 1, this.y)
-
     return cell
   }
 
@@ -80,9 +77,9 @@ export class GridCell<GenericCellElement> {
 
 function make2DArray(xCount: number, yCount: number): GridCoords {
   let grid: number[][][] = []
-  for (let x = 0; x < xCount + 1; x++) {
+  for (let x = 0; x < xCount; x++) {
     let row = []
-    for (let y = 0; y < yCount + 1; y++) {
+    for (let y = 0; y < yCount; y++) {
       row.push([x, y])
     }
     grid.push(row)
