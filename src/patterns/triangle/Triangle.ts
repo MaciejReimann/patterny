@@ -37,6 +37,7 @@ function createLinesToNeighbours<GenericCellElement>(
   return [
     createLineToRight(cell, cellSize),
     createLineToBottom(cell, cellSize),
+    createLineToBottomRight(cell, cellSize),
   ].filter((line) => line !== null)
 }
 
@@ -64,5 +65,23 @@ function createLineToBottom<GenericCellElement>(
 
   return makeLine(
     [cell.x, cell.y, cellToBottom.x, cellToBottom.y].map((v) => v * cellSize)
+  )
+}
+
+function createLineToBottomRight<GenericCellElement>(
+  cell: GridCell<GenericCellElement>,
+  cellSize: number
+) {
+  const cellToBottom = cell.getBottom()
+
+  if (cellToBottom === null) return null
+
+  const cellToBottomRight = cellToBottom.getRight()
+  if (cellToBottomRight === null) return null
+
+  return makeLine(
+    [cell.x, cell.y, cellToBottomRight.x, cellToBottomRight.y].map(
+      (v) => v * cellSize
+    )
   )
 }
