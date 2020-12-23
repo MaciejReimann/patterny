@@ -18,11 +18,16 @@ export class Triangle {
     const cells = grid.getCells()
 
     cells.forEach((cell) => {
-      // console.log(cell)
-      lines = [...lines, ...createLinesToNeighbours(cell, cellSize)]
+      const paths = createLinesToNeighbours(cell, cellSize)
+
+      if (paths !== null) {
+        console.log("paths", paths)
+        lines.push(...paths)
+      }
     })
 
     lines.forEach((line: any) => {
+      // console.log("line", line)
       fabricCanvas.add(line)
     })
 
@@ -34,54 +39,34 @@ function createLinesToNeighbours<GenericCellElement>(
   cell: GridCell<GenericCellElement>,
   cellSize: number
 ) {
-  return [
-    createLineToRight(cell, cellSize),
-    createLineToBottom(cell, cellSize),
-    createLineToBottomRight(cell, cellSize),
-  ].filter((line) => line !== null)
-}
-
-function createLineToRight<GenericCellElement>(
-  cell: GridCell<GenericCellElement>,
-  cellSize: number
-) {
   const cellToRight = cell.getRight()
-
-  if (cellToRight === null) return null
-
-  return makeLine(
-    [cell.x, cell.y, cellToRight.x, cellToRight.y].map((v) => v * cellSize)
-  )
-}
-
-function createLineToBottom<GenericCellElement>(
-  cell: GridCell<GenericCellElement>,
-  cellSize: number
-) {
   const cellToBottom = cell.getBottom()
 
-  if (cellToBottom === null) return null
-  console.log(cellToBottom, cellToBottom)
-
-  return makeLine(
-    [cell.x, cell.y, cellToBottom.x, cellToBottom.y].map((v) => v * cellSize)
-  )
-}
-
-function createLineToBottomRight<GenericCellElement>(
-  cell: GridCell<GenericCellElement>,
-  cellSize: number
-) {
-  const cellToBottom = cell.getBottom()
-
-  if (cellToBottom === null) return null
-
+  if (cellToBottom === null || cellToRight === null) return null
   const cellToBottomRight = cellToBottom.getRight()
+
   if (cellToBottomRight === null) return null
 
-  return makeLine(
-    [cell.x, cell.y, cellToBottomRight.x, cellToBottomRight.y].map(
-      (v) => v * cellSize
-    )
+  console.log(cell.element)
+
+  const apexA = new fabric.Point(cell.x, cell.y).multiply(cellSize)
+  const apexB = new fabric.Point(cellToRight.x, cellToRight.y).multiply(
+    cellSize
   )
+  const apexC = new fabric.Point(
+    cellToBottomRight.x,
+    cellToBottomRight.y
+  ).multiply(cellSize)
+
+  const topRightPath = new fabric.Path(
+    `M ${apexA.x} ${apexA.y} L ${apexB.x} ${apexB.y} L ${apexC.x} ${apexC.y} z`
+  )
+  topRightPath.set({
+    fill: "red",
+    stroke: "green",
+    opacity: 0.5,
+    selectable: false,
+  })
+
+  return [topRightPath]
 }
