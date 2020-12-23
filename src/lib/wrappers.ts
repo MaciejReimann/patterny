@@ -15,7 +15,7 @@ export function makeLine(coords: number[]) {
   return new fabric.Line(coords, {
     fill: "red",
     stroke: "red",
-    strokeWidth: 2,
+    strokeWidth: 1,
     selectable: false,
     evented: false,
   })
