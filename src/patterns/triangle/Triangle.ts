@@ -8,7 +8,7 @@ export class Triangle {
     const gridWidth = fabricCanvas.width / cellSize
     const gridHeight = fabricCanvas.height / cellSize
 
-    const horizontalLines: any = []
+    let lines: any = []
 
     const grid = new RectangularGrid(
       (x: number, y: number) => new fabric.Point(x, y),
@@ -18,30 +18,51 @@ export class Triangle {
     const cells = grid.getCells()
 
     cells.forEach((cell) => {
-      const horizontalLine = createLineToRight(cell, cellSize)
-
-      if (horizontalLine) {
-        horizontalLines.push(horizontalLine)
-      }
+      // console.log(cell)
+      lines = [...lines, ...createLinesToNeighbours(cell, cellSize)]
     })
 
-    horizontalLines.forEach((line: any) => {
+    lines.forEach((line: any) => {
       fabricCanvas.add(line)
     })
 
-    // console.log("horizontalLines", horizontalLines)
+    // console.log("lines", lines)
   }
 }
 
-const createLineToRight = <GenericCellElement>(
+function createLinesToNeighbours<GenericCellElement>(
   cell: GridCell<GenericCellElement>,
   cellSize: number
-) => {
-  const cellOnRight = cell.getRight()
+) {
+  return [
+    createLineToRight(cell, cellSize),
+    createLineToBottom(cell, cellSize),
+  ].filter((line) => line !== null)
+}
 
-  if (cellOnRight === null) return null
+function createLineToRight<GenericCellElement>(
+  cell: GridCell<GenericCellElement>,
+  cellSize: number
+) {
+  const cellToRight = cell.getRight()
+
+  if (cellToRight === null) return null
 
   return makeLine(
-    [cell.x, cell.y, cellOnRight.x, cellOnRight.y].map((v) => v * cellSize)
+    [cell.x, cell.y, cellToRight.x, cellToRight.y].map((v) => v * cellSize)
+  )
+}
+
+function createLineToBottom<GenericCellElement>(
+  cell: GridCell<GenericCellElement>,
+  cellSize: number
+) {
+  const cellToBottom = cell.getBottom()
+
+  if (cellToBottom === null) return null
+  console.log(cellToBottom, cellToBottom)
+
+  return makeLine(
+    [cell.x, cell.y, cellToBottom.x, cellToBottom.y].map((v) => v * cellSize)
   )
 }
