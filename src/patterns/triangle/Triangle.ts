@@ -64,6 +64,36 @@ export class Triangle {
       // console.log("line", line)
       fabricCanvas.add(line)
     })
+    const canvas = fabricCanvas
+
+    // adapted from: https://stackoverflow.com/questions/22029565/background-gradient-in-fabric-js
+    // couldn't find a way to will path with gradient
+    var grad = new fabric.Gradient({
+      type: "linear",
+      coords: {
+        x1: 0,
+        y1: 0,
+        x2: canvas.width,
+        y2: canvas.height,
+      },
+      colorStops: [
+        {
+          color: "rgb(166,111,213)",
+          offset: "0",
+        },
+        {
+          color: "rgba(106, 72, 215, 0.5)",
+          offset: "0.5",
+        },
+        {
+          color: "#200772",
+          offset: "1",
+        },
+      ],
+    })
+
+    canvas.backgroundColor = grad.toLive(canvas.contextContainer)
+    canvas.renderAll()
 
     console.log("fabricCanvas", fabricCanvas)
   }
@@ -116,6 +146,8 @@ function createLinesToNeighbours(
   const apexC = cellToBottomRight.element
   const apexD = cellToBottom.element
 
+  // const topRightPath = new fabric.Triangle(apexA.x, apexA.y, )
+
   const topRightPath = new fabric.Path(
     `M ${apexA.x} ${apexA.y} L ${apexB.x} ${apexB.y} L ${apexC.x} ${apexC.y} z`
   )
@@ -126,14 +158,16 @@ function createLinesToNeighbours(
   topRightPath.set({
     fill: "red",
     stroke: "green",
-    opacity: 0.5,
+    opacity: 0.1,
     selectable: false,
   })
+
+  console.log(topRightPath.toSVG())
 
   bottomLeftPath.set({
     fill: "green",
     stroke: "green",
-    opacity: 0.5,
+    opacity: 0.1,
     selectable: false,
   })
 
