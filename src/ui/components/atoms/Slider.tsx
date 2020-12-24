@@ -17,16 +17,21 @@ export const Slider = (props: SliderProps) => {
 
   return (
     <div className={styles.wrapper}>
-      <input
-        className="slider is-fullwidth"
-        step="1"
-        min={minValue}
-        max={maxValue}
-        value={value}
-        type="range"
-        onChange={handleChange}
-      ></input>
-      <output htmlFor="sliderWithValue">{value}</output>
+      <div className="field">
+        <label className="label">Cell size</label>
+        <div className="control">
+          <input
+            className="slider is-fullwidth"
+            step="1"
+            min={minValue}
+            max={maxValue}
+            value={value}
+            type="range"
+            onChange={handleChange}
+          ></input>
+          <output htmlFor="sliderWithValue">{value}</output>
+        </div>
+      </div>
     </div>
   )
 }

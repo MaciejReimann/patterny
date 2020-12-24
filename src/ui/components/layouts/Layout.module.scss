@@ -1,0 +1,20 @@
+.wrapper {
+  height: 100vh;
+}
+
+.columns {
+  height: calc(100vh - 52px);
+}
+
+.main {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.aside {
+  height: 100%;
+  background-color: white;
+  padding: 16px;
+}
