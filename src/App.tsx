@@ -1,26 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react"
+// import logo from './logo.svg';
+// import './App.css';
+import { ColorPalette } from "./ui/components/atoms/ColorPalette"
+import { ColorPalettes } from "./ui/utils/color-palettes/color-palettes"
 
-function App() {
+export function App() {
+  const colorPalettes = new ColorPalettes({ length: 9 })
+  const brewerPalettes = Object.entries(colorPalettes.getBrewerPalettes())
+  // const colors =  [0,1,2,3,4].map(c => brewerPalettes(c)).map(c => c.rgb))
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      ""
+      {brewerPalettes.map((palette) => (
+        <ColorPalette colors={palette[1]} name={palette[0]} />
+      ))}
+      ""
     </div>
-  );
+  )
 }
-
-export default App;
