@@ -2,11 +2,30 @@ import p5 from "p5"
 import { fabric } from "fabric"
 import { makeLine } from "../../lib/wrappers"
 import { RectangularGrid, GridCell } from "../common/Grid"
+import { PatternConfig, PatternType } from "../common/pattern"
 
-export class Triangle {
-  fillCanvas = (cellSize: number = 100) => (fabricCanvas: any) => {
-    const gridWidth = fabricCanvas.width / cellSize
-    const gridHeight = fabricCanvas.height / cellSize
+function adaptTrianglePatternConfig(
+  patternConfig: PatternConfig,
+  fabricCanvas: any
+): TrianglePatternConfig {
+  const cellSize = patternConfig.density // temp
+  const gridWidth = fabricCanvas.width / cellSize
+  const gridHeight = fabricCanvas.height / cellSize
+  return { cellSize, gridWidth, gridHeight }
+}
+
+type TrianglePatternConfig = {
+  cellSize: number
+  gridWidth: number
+  gridHeight: number
+}
+
+export class Triangle implements PatternType {
+  draw = (patternConfig: PatternConfig, fabricCanvas: any) => {
+    const { cellSize, gridWidth, gridHeight } = adaptTrianglePatternConfig(
+      patternConfig,
+      fabricCanvas
+    )
 
     let lines: any = []
     let apices: any = []

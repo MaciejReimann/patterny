@@ -1,6 +1,6 @@
-import React from "react"
+import React, { useEffect, useRef } from "react"
+import { fabric } from "fabric"
 
-import { useFabric } from "../../hooks/useFabric"
 import styles from "./Canvas.module.scss"
 
 interface CanvasConfig {
@@ -9,19 +9,25 @@ interface CanvasConfig {
 }
 
 interface CanvasProps extends CanvasConfig {
-  callback: any
+  setCanvas: (canvas: fabric.Canvas) => void
 }
 
 export const Canvas = (props: CanvasProps) => {
-  const { width, height, callback } = props
+  const { width, height, setCanvas } = props
+  const canvasRef = useRef(null)
 
-  const ref = useFabric((fabricCanvas: any) => {
-    callback(fabricCanvas)
-  })
+  useEffect(() => {
+    setCanvas(
+      new fabric.Canvas(canvasRef.current, {
+        renderOnAddRemove: true,
+      })
+    )
+  }, [setCanvas])
+
   return (
     <div className={styles.wrapper}>
       <canvas
-        ref={ref}
+        ref={canvasRef}
         width={width}
         height={height}
         className={styles.canvas}

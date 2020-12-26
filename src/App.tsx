@@ -1,15 +1,46 @@
-import React from "react"
+import React, { useState, useEffect, useMemo } from "react"
 
+import { Pattern, PatternConfig } from "./patterns/common/pattern"
 import { Arabesque } from "./patterns/arabesque/Arabesque"
 import { Triangle } from "./patterns/triangle/Triangle"
 
 import { Canvas } from "./components/canvas/Canvas"
 
 export const App = () => {
-  const arabesque = new Arabesque()
-  const triangle = new Triangle()
+  const [fabricCanvas, setFabricCanvas] = useState<fabric.Canvas | undefined>()
 
-  // TODO: add sliders and see how it works
+  // const arabesque = new Arabesque()
+  // const triangle = new Triangle()
 
-  return <Canvas width={600} height={600} callback={triangle.fillCanvas()} />
+  // const [pattern, setPattern] = useState<number>(50)
+  const [density, setDensity] = useState<number>(50)
+
+  const pattern = useMemo(() => {
+    const patternConfig: PatternConfig = {
+      density,
+    }
+    const pattern = new Pattern(new Triangle(), patternConfig)
+    return pattern
+  }, [density])
+
+  const handleDensityChange = (v: number) => {
+    pattern.setDensity(v)
+    setDensity(v)
+  }
+
+  useEffect(() => {
+    if (fabricCanvas) {
+      pattern.draw(fabricCanvas)
+    }
+  }, [fabricCanvas, pattern, density])
+
+  return (
+    <>
+      <div>Current density: {density}</div>
+      <Canvas width={600} height={600} setCanvas={setFabricCanvas} />
+      <button onClick={() => handleDensityChange(20)}>20</button>
+      <button onClick={() => handleDensityChange(50)}>50</button>
+      <button onClick={() => handleDensityChange(100)}>100</button>
+    </>
+  )
 }
