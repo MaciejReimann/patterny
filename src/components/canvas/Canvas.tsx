@@ -12,6 +12,8 @@ interface CanvasProps extends CanvasConfig {
   setCanvas: (canvas: fabric.Canvas) => void
 }
 
+// adapted example from
+// https://binarapps.com/integrate-fabric-js-canvas-drawing-library-with-react-app-via-uncontrolled-component/
 export const Canvas = (props: CanvasProps) => {
   const { width, height, setCanvas } = props
   const canvasRef = useRef(null)

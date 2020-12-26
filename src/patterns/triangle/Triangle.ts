@@ -4,28 +4,40 @@ import { makeLine } from "../../lib/wrappers"
 import { RectangularGrid, GridCell } from "../common/Grid"
 import { PatternConfig, PatternType } from "../common/pattern"
 
+function getDeviation(patternConfig: PatternConfig) {
+  const { deviation, density } = patternConfig
+  if (deviation <= 0) return 0
+  if (deviation >= density) return density
+  return deviation
+}
+
 function adaptTrianglePatternConfig(
   patternConfig: PatternConfig,
   fabricCanvas: any
 ): TrianglePatternConfig {
   const cellSize = patternConfig.density // temp
+  const deviation = getDeviation(patternConfig)
   const gridWidth = fabricCanvas.width / cellSize
   const gridHeight = fabricCanvas.height / cellSize
-  return { cellSize, gridWidth, gridHeight }
+
+  return { cellSize, gridWidth, gridHeight, deviation }
 }
 
 type TrianglePatternConfig = {
-  cellSize: number
   gridWidth: number
   gridHeight: number
+  cellSize: number
+  deviation: number // where 0 is no deviation (regular frid, and 100 is cellSize)
 }
 
 export class Triangle implements PatternType {
   draw = (patternConfig: PatternConfig, fabricCanvas: any) => {
-    const { cellSize, gridWidth, gridHeight } = adaptTrianglePatternConfig(
-      patternConfig,
-      fabricCanvas
-    )
+    const {
+      cellSize,
+      deviation,
+      gridWidth,
+      gridHeight,
+    } = adaptTrianglePatternConfig(patternConfig, fabricCanvas)
 
     let lines: any = []
     let apices: any = []
@@ -40,8 +52,8 @@ export class Triangle implements PatternType {
     //   cell.element.add(new fabric.Point(30, 40))
     // )
     cells.forEach((cell) => {
-      const randomNumberX = Math.floor(Math.random() * 30)
-      const randomNumberY = Math.floor(Math.random() * 30)
+      const randomNumberX = Math.floor(Math.random() * deviation)
+      const randomNumberY = Math.floor(Math.random() * deviation)
 
       const isOnHorizontalEdge = !cell.getRight() || !cell.getLeft()
       const isOnVerticalEdge = !cell.getTop() || !cell.getBottom()

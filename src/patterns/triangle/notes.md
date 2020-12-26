@@ -33,3 +33,7 @@ COLORS:
 -- how colors are distributed across grid cells?
 --- this is a param (left to right, diagonally,)
 -- how colors are assigned into particular cells (divided) is there any additional logic to it, like +brightness to top-right, or sth like that?
+
+FEATURES:
+
+- add layers and possibility ot edit each layer's parameters + layer opacity

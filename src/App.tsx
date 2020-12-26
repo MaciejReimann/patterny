@@ -13,19 +13,24 @@ export const App = () => {
   // const triangle = new Triangle()
 
   // const [pattern, setPattern] = useState<number>(50)
-  const [density, setDensity] = useState<number>(50)
+  const [density, setDensity] = useState<number>(80)
+  const [deviation, setDeviation] = useState<number>(10)
 
   const pattern = useMemo(() => {
     const patternConfig: PatternConfig = {
       density,
+      deviation,
     }
     const pattern = new Pattern(new Triangle(), patternConfig)
     return pattern
-  }, [density])
+  }, [density, deviation])
 
   const handleDensityChange = (v: number) => {
-    pattern.setDensity(v)
     setDensity(v)
+  }
+
+  const handleDeviationChange = (v: number) => {
+    setDeviation(v)
   }
 
   useEffect(() => {
@@ -38,9 +43,18 @@ export const App = () => {
     <>
       <div>Current density: {density}</div>
       <Canvas width={600} height={600} setCanvas={setFabricCanvas} />
-      <button onClick={() => handleDensityChange(20)}>20</button>
-      <button onClick={() => handleDensityChange(50)}>50</button>
-      <button onClick={() => handleDensityChange(100)}>100</button>
+      <div>
+        <button onClick={() => handleDensityChange(20)}> Density 20</button>
+        <button onClick={() => handleDensityChange(50)}>Density 50</button>
+        <button onClick={() => handleDensityChange(100)}>Density 100</button>
+      </div>
+      <div>
+        <button onClick={() => handleDeviationChange(20)}> Deviation 20</button>
+        <button onClick={() => handleDeviationChange(50)}>Deviation 50</button>
+        <button onClick={() => handleDeviationChange(100)}>
+          Deviation 100
+        </button>
+      </div>
     </>
   )
 }

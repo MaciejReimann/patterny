@@ -4,6 +4,7 @@ export interface PatternType {
 
 export type PatternConfig = {
   density: number
+  deviation: number
 }
 
 export class Pattern {
