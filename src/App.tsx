@@ -7,32 +7,57 @@ import { Layout } from "./ui/components/layouts/Layout"
 import "./App.scss"
 
 export function App() {
-  const [sliderValue, setSliderValue] = useState<number>(50)
+  const patternTypes = ["Rectangular", "Circular", "Hexagonal", "Random"]
+
   const [width, setWidth] = useState<number>(1240)
   const [height, setHeight] = useState<number>(620)
 
-  const onSliderChange = (value: any) => {
-    setSliderValue(value)
+  const [patternType, setPatternType] = useState<string>(patternTypes[0])
+  const [cellSize, setCellSize] = useState<number>(50)
+  const [geometryVariance, setGeometryVariance] = useState<number>(50)
+  const [shadingIntensity, setShadingIntensity] = useState<number>(50)
+
+  const onWidthChange = (value: number) => {
+    setWidth(value)
   }
 
-  const onWidthChange = (value: any) => {
-    //
+  const onHeightChange = (value: number) => {
+    setHeight(value)
   }
 
-  const onHeightChange = (value: any) => {
-    //
+  const onSetPatternType = (value: string) => {
+    setPatternType(value)
+  }
+
+  const onCellSizeChange = (value: number) => {
+    setCellSize(value)
+  }
+
+  const onSetGeometryVariance = (value: number) => {
+    setGeometryVariance(value)
+  }
+
+  const onSetShadingIntensity = (value: number) => {
+    setShadingIntensity(value)
   }
 
   return (
     <Layout
       aside={
         <Controls
-          sliderValue={sliderValue}
-          onSliderChange={onSliderChange}
           width={width}
-          onWidthChange={onWidthChange}
+          setWidth={onWidthChange}
           height={height}
-          onHeightChange={onHeightChange}
+          setHeight={onHeightChange}
+          patternTypes={patternTypes}
+          patternType={patternType}
+          setPatternType={onSetPatternType}
+          cellSize={cellSize}
+          setCellSize={onCellSizeChange}
+          geometryVariance={geometryVariance}
+          setGeometryVariance={onSetGeometryVariance}
+          shadingIntensity={shadingIntensity}
+          setShadingIntensity={onSetShadingIntensity}
         />
       }
       main={<Canvas />}

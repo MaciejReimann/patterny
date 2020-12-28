@@ -1,12 +1,12 @@
 import React from "react"
-// import styles from "./Canvas.module.scss"
+import styles from "./Header.module.scss"
 
 interface HeaderProps {}
 
 export const Header = (props: HeaderProps) => {
   return (
     <nav className="navbar" role="navigation" aria-label="main navigation">
-      <div className="navbar-brand">
+      <div className={`${styles.brand} navbar-brand`}>
         <a className="navbar-item" href="https://bulma.io">
           PATTERNY
         </a>

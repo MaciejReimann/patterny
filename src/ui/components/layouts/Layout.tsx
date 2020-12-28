@@ -18,7 +18,7 @@ export const Layout = (props: LayoutProps) => {
         <div className={`column`}>
           <aside className={styles.aside}>{aside}</aside>
         </div>
-        <div className={`column is-9`}>
+        <div className={`column is-8`}>
           <main className={styles.main}>{main}</main>
         </div>
       </div>

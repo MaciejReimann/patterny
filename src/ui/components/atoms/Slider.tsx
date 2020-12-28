@@ -6,10 +6,11 @@ interface SliderProps {
   onChange: (value: number) => void
   minValue?: number
   maxValue?: number
+  label?: string
 }
 
 export const Slider = (props: SliderProps) => {
-  const { value, onChange, minValue = 0, maxValue = 100 } = props
+  const { value, onChange, minValue = 0, maxValue = 100, label } = props
 
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     onChange(Number(e.currentTarget.value))
@@ -18,10 +19,11 @@ export const Slider = (props: SliderProps) => {
   return (
     <div className={styles.wrapper}>
       <div className="field">
-        <label className="label">Cell size</label>
+        {label && <label className="label">{label}</label>}
         <div className="control">
           <input
-            className="slider is-fullwidth"
+            id="sliderWithValue"
+            className="slider has-output-tooltip is-fullwidth"
             step="1"
             min={minValue}
             max={maxValue}
@@ -29,7 +31,7 @@ export const Slider = (props: SliderProps) => {
             type="range"
             onChange={handleChange}
           ></input>
-          <output htmlFor="sliderWithValue">{value}</output>
+          {/* <output className={styles.output} htmlFor="sliderWithValue">{value}</output> */}
         </div>
       </div>
     </div>

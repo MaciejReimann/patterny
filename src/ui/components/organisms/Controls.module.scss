@@ -1,3 +1,27 @@
 .wrapper {
   width: 100%;
+  padding-left: 8px;
+}
+
+.canvas-size {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+}
+
+.pattern-types {
+  padding: 12px 0;
+}
+
+.buttons {
+  display: flex;
+
+  > div {
+    margin-right: 4px;
+  }
+}
+
+.slider {
+  padding: 12px 0;
 }
