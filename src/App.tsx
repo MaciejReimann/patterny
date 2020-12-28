@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useMemo } from "react"
 
+import { FabricCanvas } from "./lib/fabric-wrappers"
 import { Pattern, PatternConfig } from "./patterns/common/pattern"
 import { Arabesque } from "./patterns/arabesque/Arabesque"
-import { Triangle } from "./patterns/triangle/Triangle"
+import { TrianglePattern } from "./patterns/triangle/triangle-pattern"
 
 import { Canvas } from "./components/canvas/Canvas"
 
 export const App = () => {
-  const [fabricCanvas, setFabricCanvas] = useState<fabric.Canvas | undefined>()
+  const [fabricCanvas, setFabricCanvas] = useState<FabricCanvas | null>()
 
   // const arabesque = new Arabesque()
   // const triangle = new Triangle()
@@ -20,8 +21,9 @@ export const App = () => {
     const patternConfig: PatternConfig = {
       density,
       deviation,
+      shouldClearOnRender: true,
     }
-    const pattern = new Pattern(new Triangle(), patternConfig)
+    const pattern = new Pattern(new TrianglePattern(), patternConfig)
     return pattern
   }, [density, deviation])
 

@@ -2,7 +2,7 @@ import p5 from "p5"
 
 import { Polygon } from "./Polygon"
 
-import { dot } from "../../lib/wrappers"
+import { dot } from "../../lib/fabric-wrappers"
 
 export class Arabesque {
   draw(fabricCanvas: any) {

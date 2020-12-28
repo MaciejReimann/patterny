@@ -37,3 +37,7 @@ COLORS:
 FEATURES:
 
 - add layers and possibility ot edit each layer's parameters + layer opacity
+
+TODO:
+
+- make it faster!!!

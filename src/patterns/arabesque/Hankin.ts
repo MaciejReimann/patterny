@@ -1,5 +1,5 @@
 import p5 from "p5"
-import { makeLine } from "../../lib/wrappers"
+import { makeLine } from "../../lib/fabric-wrappers"
 
 export class Hankin {
   b: p5.Vector

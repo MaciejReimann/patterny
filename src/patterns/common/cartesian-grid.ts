@@ -1,35 +1,24 @@
-type ElementConstructor<GenericCellElement> = (
-  x: number,
-  y: number
-) => GenericCellElement
+import { fabric } from "fabric"
 
-export class RectangularGrid<GenericCellElement> {
-  cells: GridCell<GenericCellElement>[][]
+export class CartesianGrid {
+  cells: GridCell[][]
 
   constructor(
-    readonly elementConstructor: ElementConstructor<GenericCellElement>,
-    readonly x: number,
-    readonly y: number
+    readonly cellSize: number,
+    readonly width: number,
+    readonly height: number
   ) {
-    const grid = make2DArray(x + 1, y + 1)
+    const grid = make2DArray(width + 1, height + 1)
     this.cells = grid.map((row) =>
-      row.map(
-        (cell) =>
-          new GridCell<GenericCellElement>(
-            this,
-            elementConstructor,
-            cell[0],
-            cell[1]
-          )
-      )
+      row.map((cell) => new GridCell(this, cellSize, cell[0], cell[1]))
     )
   }
 
-  getCells(): GridCell<GenericCellElement>[] {
+  getCells(): GridCell[] {
     return this.cells.flat()
   }
 
-  getCell(x: number, y: number): GridCell<GenericCellElement> | null {
+  getCell(x: number, y: number): GridCell | null {
     const cellX = this.cells[x]
     const cell = cellX ? cellX[y] : null
     return cell ? cell : null
@@ -38,20 +27,20 @@ export class RectangularGrid<GenericCellElement> {
 
 type GridCoords = number[][][]
 
-export class GridCell<GenericCellElement> {
+export class GridCell {
   x: number
   y: number
-  element: GenericCellElement
+  node: fabric.Point
 
   constructor(
-    private grid: RectangularGrid<GenericCellElement>,
-    elementConstructor: ElementConstructor<GenericCellElement>,
+    private grid: CartesianGrid,
+    cellSize: number,
     x: number,
     y: number
   ) {
     this.x = x
     this.y = y
-    this.element = elementConstructor(this.x, this.y)
+    this.node = new fabric.Point(x, y).multiply(cellSize)
   }
 
   getRight() {
