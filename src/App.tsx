@@ -1,8 +1,10 @@
 import React, { useState } from "react"
 
-import { ColorPalettes } from "./ui/utils/color-palettes/color-palettes"
+import {
+  ColorPalettes,
+  ColorPalette,
+} from "./ui/utils/color-palettes/color-palettes"
 
-import { ColorPalette } from "./ui/components/atoms/ColorPalette"
 import { Canvas } from "./ui/components/atoms/Canvas" // this will be in import from organisms DisplayPane (export button + modal)
 import { Controls } from "./ui/components/organisms/Controls"
 import { Layout } from "./ui/components/layouts/Layout"
@@ -12,6 +14,9 @@ import "./App.scss"
 export function App() {
   const patternTypes = ["Rectangular", "Circular", "Hexagonal", "Random"]
 
+  const colorPalettes = new ColorPalettes({ length: 9 })
+  const brewerPalettes = colorPalettes.getBrewerPalettes()
+
   const [width, setWidth] = useState<number>(1240)
   const [height, setHeight] = useState<number>(620)
 
@@ -19,6 +24,9 @@ export function App() {
   const [cellSize, setCellSize] = useState<number>(50)
   const [geometryVariance, setGeometryVariance] = useState<number>(50)
   const [shadingIntensity, setShadingIntensity] = useState<number>(50)
+  const [colorPalette, setColorPalette] = useState<ColorPalette>(
+    brewerPalettes[0]
+  )
 
   const onWidthChange = (value: number) => {
     setWidth(value)
@@ -44,8 +52,9 @@ export function App() {
     setShadingIntensity(value)
   }
 
-  const colorPalettes = new ColorPalettes({ length: 9 })
-  const brewerPalettes = Object.entries(colorPalettes.getBrewerPalettes())
+  const onSetColorPalette = (value: ColorPalette) => {
+    setColorPalette(value)
+  }
 
   return (
     <Layout
@@ -65,10 +74,10 @@ export function App() {
             setGeometryVariance={onSetGeometryVariance}
             shadingIntensity={shadingIntensity}
             setShadingIntensity={onSetShadingIntensity}
+            colorPalettes={brewerPalettes}
+            colorPalette={colorPalette}
+            setColorPalette={onSetColorPalette}
           />
-          {brewerPalettes.map((palette) => (
-            <ColorPalette colors={palette[1]} name={palette[0]} />
-          ))}
         </>
       }
       main={<Canvas />}

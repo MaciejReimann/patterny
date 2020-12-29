@@ -1,9 +1,10 @@
 import React, { useState } from "react"
 
+import { ColorPalette } from "../../utils/color-palettes/color-palettes"
 import { Slider } from "../atoms/Slider"
 import { Input, InputSize } from "../atoms/Input"
 import { Button, ButtonSizes } from "../atoms/Button"
-
+import { ColorPaletteSelect } from "../atoms/ColorPaletteSelect"
 import styles from "./Controls.module.scss"
 
 type NumberSetter = (value: number) => void
@@ -19,7 +20,8 @@ interface PatternParameters {
   cellSize: number
   geometryVariance: number
   shadingIntensity: number
-  colors?: string[]
+  colorPalettes: ColorPalette[]
+  colorPalette: ColorPalette
 }
 
 interface ControlsProps extends PatternParameters {
@@ -29,7 +31,7 @@ interface ControlsProps extends PatternParameters {
   setCellSize: NumberSetter
   setGeometryVariance: NumberSetter
   setShadingIntensity: NumberSetter
-  setColors?: (value: string[]) => void
+  setColorPalette: (value: ColorPalette) => void
 }
 
 export const Controls = (props: ControlsProps) => {
@@ -41,17 +43,20 @@ export const Controls = (props: ControlsProps) => {
     cellSize,
     geometryVariance,
     shadingIntensity,
-    colors,
+    colorPalettes,
+    colorPalette,
     setWidth,
     setHeight,
     setPatternType,
     setCellSize,
     setGeometryVariance,
     setShadingIntensity,
-    setColors,
+    setColorPalette,
   } = props
 
   const selectedPattern = patternType
+
+  console.log("colorPalette", colorPalette)
 
   return (
     <div className={styles.wrapper}>
@@ -74,12 +79,14 @@ export const Controls = (props: ControlsProps) => {
         <label className="label">Pattern Types</label>
         <div className={styles["buttons"]}>
           {patternTypes.map((patternType) => (
-            <Button
-              isClicked={selectedPattern === patternType}
-              label={patternType}
-              onClick={() => setPatternType(patternType)}
-              size={ButtonSizes.Small}
-            />
+            <div key={patternType}>
+              <Button
+                isClicked={selectedPattern === patternType}
+                label={patternType}
+                onClick={() => setPatternType(patternType)}
+                size={ButtonSizes.Small}
+              />
+            </div>
           ))}
         </div>
       </div>
@@ -100,6 +107,19 @@ export const Controls = (props: ControlsProps) => {
           value={shadingIntensity}
           onChange={setShadingIntensity}
         />
+      </div>
+      <div className={styles["slider"]}>
+        {colorPalettes.map((palette) => (
+          <div key={palette.name}>
+            <ColorPaletteSelect
+              colors={palette.colors}
+              name={palette.name}
+              onClick={() => setColorPalette(palette)}
+              isSelected={colorPalette.name === palette.name}
+              isSquare={false}
+            />
+          </div>
+        ))}
       </div>
     </div>
   )

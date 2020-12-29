@@ -1,0 +1,23 @@
+.wrapper {
+  width: 100%;
+  display: flex;
+  cursor: pointer;
+
+  &--selected {
+    // why I need to repeat style definition for wrapper?
+    width: 100%;
+    display: flex;
+    cursor: pointer;
+    border: 1px solid blue;
+  }
+}
+
+.color-cell--square {
+  width: 24px;
+  height: 24px;
+}
+
+.color-cell--flexible {
+  width: 100%;
+  height: 24px;
+}

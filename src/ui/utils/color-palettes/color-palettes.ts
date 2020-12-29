@@ -4,6 +4,11 @@ export interface ColorPalettesConfig {
   length: number
 }
 
+export interface ColorPalette {
+  name: string
+  colors: string[]
+}
+
 export class ColorPalettes {
   brewer = removeBrewerDuplicates(chroma.brewer)
   length: number
@@ -12,9 +17,11 @@ export class ColorPalettes {
     this.length = config.length
   }
 
-  getBrewerPalettes(count?: number) {
-    console.log(Object.keys(this.brewer).length)
-    return this.brewer
+  getBrewerPalettes(count?: number): ColorPalette[] {
+    return Object.entries(this.brewer).map((entry) => ({
+      name: entry[0],
+      colors: entry[1],
+    }))
   }
 }
 
