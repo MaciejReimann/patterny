@@ -1,8 +1,11 @@
-import { fabric } from "fabric"
-
 import { FabricCanvas } from "../../lib/fabric-wrappers"
+import { TrianglePattern } from "../triangle/triangle-pattern"
 export interface PatternType {
   draw: (patternConfig: PatternConfig, fabricCanvas: FabricCanvas) => void
+}
+
+export enum PatternName {
+  Trangle = "triangle",
 }
 
 export type PatternConfig = {
@@ -15,18 +18,20 @@ export class Pattern {
   config: PatternConfig
   pattern: PatternType
 
-  constructor(pattern: PatternType, config: PatternConfig) {
+  constructor(patternName: PatternName, config: PatternConfig) {
     this.config = config
-    this.pattern = pattern
+    this.pattern = PatternFactory(patternName)
+    console.log("Pattern initialised!")
   }
 
-  setDensity = (density: number) => {
-    this.config = { ...this.config, density }
+  setConfig = (config: PatternConfig) => {
+    this.config = config
   }
 
-  setType = (pattern: PatternType) => {
-    this.pattern = pattern
-  }
+  // TODO: this needs to be implemented differently
+  // setType = (pattern: PatternType) => {
+  //   this.pattern = pattern
+  // }
 
   draw = (fabricCanvas: FabricCanvas) => {
     if (this.config.shouldClearOnRender) this.clearCanvas(fabricCanvas)
@@ -35,5 +40,14 @@ export class Pattern {
 
   private clearCanvas = (fabricCanvas: FabricCanvas) => {
     fabricCanvas.clear()
+  }
+}
+
+function PatternFactory(patternName: PatternName): PatternType {
+  switch (patternName) {
+    case PatternName.Trangle:
+      return new TrianglePattern()
+    default:
+      throw new Error(`No pattern name defined for ${patternName}`)
   }
 }

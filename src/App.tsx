@@ -1,31 +1,32 @@
 import React, { useState, useEffect, useMemo } from "react"
 
 import { FabricCanvas } from "./lib/fabric-wrappers"
-import { Pattern, PatternConfig } from "./patterns/common/pattern"
+import { Pattern, PatternName, PatternConfig } from "./patterns/common/pattern"
 import { Arabesque } from "./patterns/arabesque/Arabesque"
-import { TrianglePattern } from "./patterns/triangle/triangle-pattern"
 
 import { Canvas } from "./components/canvas/Canvas"
 
 export const App = () => {
   const [fabricCanvas, setFabricCanvas] = useState<FabricCanvas | null>()
-
-  // const arabesque = new Arabesque()
-  // const triangle = new Triangle()
-
-  // const [pattern, setPattern] = useState<number>(50)
+  const [pattern, setPattern] = useState<Pattern | null>()
   const [density, setDensity] = useState<number>(80)
   const [deviation, setDeviation] = useState<number>(10)
 
-  const pattern = useMemo(() => {
+  const patternConfig = useMemo(() => {
     const patternConfig: PatternConfig = {
       density,
       deviation,
       shouldClearOnRender: true,
     }
-    const pattern = new Pattern(new TrianglePattern(), patternConfig)
-    return pattern
+
+    return patternConfig
   }, [density, deviation])
+
+  useEffect(() => {
+    setPattern(new Pattern(PatternName.Trangle, patternConfig))
+  }, [])
+
+  pattern && pattern.setConfig(patternConfig)
 
   const handleDensityChange = (v: number) => {
     setDensity(v)
@@ -36,10 +37,10 @@ export const App = () => {
   }
 
   useEffect(() => {
-    if (fabricCanvas) {
+    if (fabricCanvas && pattern) {
       pattern.draw(fabricCanvas)
     }
-  }, [fabricCanvas, pattern, density])
+  }, [fabricCanvas, pattern, patternConfig])
 
   return (
     <>
