@@ -5,6 +5,7 @@ import {
   ColorPalette,
 } from "./ui/utils/color-palettes/color-palettes"
 
+import { Header } from "./ui/components/molecules/Header"
 import { Canvas } from "./ui/components/atoms/Canvas" // this will be in import from organisms DisplayPane (export button + modal)
 import { Controls } from "./ui/components/organisms/Controls"
 import { Layout } from "./ui/components/layouts/Layout"
@@ -58,6 +59,7 @@ export function App() {
 
   return (
     <Layout
+      header={<Header />}
       aside={
         <>
           <Controls

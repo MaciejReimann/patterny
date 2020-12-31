@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import styles from "./Input.module.scss"
 
 export enum InputSize {
@@ -19,19 +19,30 @@ export const Input = (props: InputProps) => {
     onChange(Number(e.currentTarget.value))
   }
 
+  const [isHovered, setIsHovered] = useState<boolean>(false)
+
+  // TODO: make it change style on hover
+  const handleHover = (e: React.FormEvent<HTMLInputElement>) => {
+    setIsHovered(!isHovered)
+  }
+
   const inputSize = size ? `is-${size}` : ""
 
   return (
     <div className={styles.wrapper}>
       <div className="field">
-        {label && <label className="label">{label}</label>}
+        {label && <label className="label content is-small">{label}</label>}
         <div className="control">
           <input
-            className={`input ${inputSize}`}
+            className={`input ${inputSize} is-info ${
+              isHovered ? "is-hovered" : ""
+            }`}
             type="text"
             placeholder="Text input"
             onChange={handleChange}
             value={value}
+            onMouseOver={handleHover}
+            onMouseOut={handleHover}
           />
         </div>
       </div>

@@ -1,6 +1,7 @@
 .wrapper {
   width: 100%;
-  padding-left: 8px;
+  padding: 56px 16px 0 24px;
+  height: 100%;
 }
 
 .canvas-size {
@@ -16,10 +17,15 @@
 
 .buttons {
   display: flex;
+  flex-wrap: wrap;
 
   > div {
-    margin-right: 4px;
+    margin: 0 4px 4px 0;
   }
+}
+
+.palette {
+  padding: 4px 0;
 }
 
 .slider {

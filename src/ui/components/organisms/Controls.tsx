@@ -76,7 +76,7 @@ export const Controls = (props: ControlsProps) => {
       </div>
 
       <div className={styles["pattern-types"]}>
-        <label className="label">Pattern Types</label>
+        <label className="label label content is-small">Pattern Types</label>
         <div className={styles["buttons"]}>
           {patternTypes.map((patternType) => (
             <div key={patternType}>
@@ -109,8 +109,10 @@ export const Controls = (props: ControlsProps) => {
         />
       </div>
       <div className={styles["slider"]}>
+        <label className="label content is-small">Color palette</label>
+
         {colorPalettes.map((palette) => (
-          <div key={palette.name}>
+          <div className={styles["palette"]} key={palette.name}>
             <ColorPaletteSelect
               colors={palette.colors}
               name={palette.name}

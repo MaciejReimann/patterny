@@ -19,11 +19,11 @@ export const Slider = (props: SliderProps) => {
   return (
     <div className={styles.wrapper}>
       <div className="field">
-        {label && <label className="label">{label}</label>}
+        {label && <label className="label content is-small">{label}</label>}
         <div className="control">
           <input
             id="sliderWithValue"
-            className="slider has-output-tooltip is-fullwidth"
+            className="slider has-output-tooltip is-fullwidth is-info is-small is-circle"
             step="1"
             min={minValue}
             max={maxValue}

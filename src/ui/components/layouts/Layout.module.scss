@@ -1,17 +1,25 @@
+$scheme-invert: hsl(0, 0%, 4%); // temporarily defined here
+
 .wrapper {
   height: 100vh;
+  overflow-y: scroll;
+  padding: 0;
 }
 
 .header {
+  position: absolute;
+  width: 100vw;
   padding-left: 8px;
+  box-shadow: 0 0.5em 1em -0.125em rgba($scheme-invert, 0.1),
+    0 0px 0 1px rgba($scheme-invert, 0.02);
 }
 
 .columns {
-  height: calc(100vh - 52px);
+  height: calc(100vh + 16px);
 }
 
 .main {
-  height: 100%;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,5 +28,7 @@
 .aside {
   height: 100%;
   background-color: white;
-  padding: 16px;
+  overflow-y: scroll;
+  box-shadow: 0.125em 0.5em 1em -0.125em rgba($scheme-invert, 0.1),
+    0.125em 0px 0 1px rgba($scheme-invert, 0.02);
 }

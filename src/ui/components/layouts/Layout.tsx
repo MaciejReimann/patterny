@@ -1,23 +1,22 @@
 import React from "react"
 
-import { Header } from "../molecules/Header"
 import styles from "./Layout.module.scss"
 
 interface LayoutProps {
-  aside: any
-  main: any
+  header: JSX.Element
+  aside: JSX.Element
+  main: JSX.Element
 }
 
 export const Layout = (props: LayoutProps) => {
-  const { aside, main } = props
+  const { header, aside, main } = props
 
   return (
     <div className={`${styles.wrapper} container.is-fullhd`}>
-      <Header />
+      <div className={`${styles.header}`}> {header}</div>
+
       <div className={`${styles.columns} columns`}>
-        <div className={`column`}>
-          <aside className={styles.aside}>{aside}</aside>
-        </div>
+        <aside className={`${styles.aside} column`}>{aside}</aside>
         <div className={`column is-8`}>
           <main className={styles.main}>{main}</main>
         </div>

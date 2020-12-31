@@ -1,7 +1,11 @@
+$scheme-invert: hsl(0, 0%, 4%); // temporarily defined here
+
 .wrapper {
   width: 100%;
   display: flex;
   cursor: pointer;
+  box-shadow: 0 0.5em 1em -0.125em rgba($scheme-invert, 0.1),
+    0 0px 0 1px rgba($scheme-invert, 0.02);
 
   &--selected {
     // why I need to repeat style definition for wrapper?
