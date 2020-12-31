@@ -1,7 +1,9 @@
 import { FabricCanvas } from "../../lib/fabric-wrappers"
 import { TrianglePattern } from "../triangle/triangle-pattern"
 export interface PatternType {
-  draw: (patternConfig: PatternConfig, fabricCanvas: FabricCanvas) => void
+  config: PatternConfig
+  setConfig: (patternConfig: PatternConfig) => void
+  draw: (fabricCanvas: FabricCanvas) => void
 }
 
 export enum PatternName {
@@ -15,17 +17,15 @@ export type PatternConfig = {
 }
 
 export class Pattern {
-  config: PatternConfig
-  pattern: PatternType
+  type: PatternType
 
-  constructor(patternName: PatternName, config: PatternConfig) {
-    this.config = config
-    this.pattern = PatternFactory(patternName)
-    console.log("Pattern initialised!")
+  constructor(patternName: PatternName) {
+    this.type = PatternFactory(patternName, defaultPatternConfig)
+    console.log("Pattern initialised")
   }
 
-  setConfig = (config: PatternConfig) => {
-    this.config = config
+  setConfig(config: PatternConfig) {
+    this.type.setConfig(config)
   }
 
   // TODO: this needs to be implemented differently
@@ -33,9 +33,9 @@ export class Pattern {
   //   this.pattern = pattern
   // }
 
-  draw = (fabricCanvas: FabricCanvas) => {
-    if (this.config.shouldClearOnRender) this.clearCanvas(fabricCanvas)
-    this.pattern.draw(this.config, fabricCanvas)
+  draw(fabricCanvas: FabricCanvas) {
+    if (this.type.config.shouldClearOnRender) this.clearCanvas(fabricCanvas)
+    this.type.draw(fabricCanvas)
   }
 
   private clearCanvas = (fabricCanvas: FabricCanvas) => {
@@ -43,11 +43,20 @@ export class Pattern {
   }
 }
 
-function PatternFactory(patternName: PatternName): PatternType {
+function PatternFactory(
+  patternName: PatternName,
+  config: PatternConfig
+): PatternType {
   switch (patternName) {
     case PatternName.Trangle:
-      return new TrianglePattern()
+      return new TrianglePattern(config)
     default:
       throw new Error(`No pattern name defined for ${patternName}`)
   }
+}
+
+const defaultPatternConfig = {
+  density: 50,
+  deviation: 50,
+  shouldClearOnRender: true,
 }

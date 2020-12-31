@@ -8,9 +8,14 @@ import { Canvas } from "./components/canvas/Canvas"
 
 export const App = () => {
   const [fabricCanvas, setFabricCanvas] = useState<FabricCanvas | null>()
-  const [pattern, setPattern] = useState<Pattern | null>()
-  const [density, setDensity] = useState<number>(80)
-  const [deviation, setDeviation] = useState<number>(10)
+
+  const [pattern, setPattern] = useState<Pattern>(
+    new Pattern(PatternName.Trangle)
+  )
+  const [density, setDensity] = useState<number>(pattern.type.config.density)
+  const [deviation, setDeviation] = useState<number>(
+    pattern.type.config.deviation
+  )
 
   const patternConfig = useMemo(() => {
     const patternConfig: PatternConfig = {
@@ -21,10 +26,6 @@ export const App = () => {
 
     return patternConfig
   }, [density, deviation])
-
-  useEffect(() => {
-    setPattern(new Pattern(PatternName.Trangle, patternConfig))
-  }, [])
 
   pattern && pattern.setConfig(patternConfig)
 

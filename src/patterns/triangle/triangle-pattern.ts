@@ -11,13 +11,23 @@ type TrianglePatternConfig = {
 }
 
 export class TrianglePattern implements PatternType {
-  draw = (patternConfig: PatternConfig, fabricCanvas: FabricCanvas) => {
+  config: PatternConfig
+
+  constructor(config: PatternConfig) {
+    this.config = config
+  }
+
+  setConfig(config: PatternConfig): void {
+    this.config = config
+  }
+
+  draw(fabricCanvas: FabricCanvas) {
     const {
       cellSize,
       deviation,
       gridWidth,
       gridHeight,
-    } = adaptTrianglePatternConfig(patternConfig, fabricCanvas)
+    } = adaptTrianglePatternConfig(this.config, fabricCanvas)
 
     const cartesianGrid = new CartesianGrid(cellSize, gridWidth, gridHeight)
     const gridCells = cartesianGrid.getCells()
