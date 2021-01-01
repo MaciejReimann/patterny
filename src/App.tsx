@@ -59,7 +59,7 @@ export const App = () => {
         <button onClick={() => handleDensityChange(100)}>Density 100</button>
       </div>
       <div>
-        <button onClick={() => handleDeviationChange(20)}> Deviation 0</button>
+        <button onClick={() => handleDeviationChange(0)}> Deviation 0</button>
         <button onClick={() => handleDeviationChange(20)}> Deviation 20</button>
         <button onClick={() => handleDeviationChange(50)}>Deviation 50</button>
         <button onClick={() => handleDeviationChange(100)}>

@@ -30,6 +30,7 @@ type GridCoords = number[][][]
 export class GridCell {
   x: number
   y: number
+  cellSize: number
   node: fabric.Point
 
   constructor(
@@ -40,7 +41,12 @@ export class GridCell {
   ) {
     this.x = x
     this.y = y
-    this.node = new fabric.Point(x, y).multiply(cellSize)
+    this.cellSize = cellSize
+    this.node = this.getNode()
+  }
+
+  getNode(): fabric.Point {
+    return new fabric.Point(this.x, this.y).multiply(this.cellSize)
   }
 
   getRight() {

@@ -18,30 +18,30 @@ export class TrianglePatternConfig {
   zoom: number = 1
 
   set(patternConfig: PatternConfig, fabricCanvas: any) {
-    this.cellSize = getMinimumDensity(patternConfig.density) // temp
-    this.distanceFromGridNodes = getDeviation(patternConfig) / 2
+    this.cellSize = getCellSize(patternConfig)
+    this.distanceFromGridNodes = getDistanceFromGridNodes(patternConfig)
+    this.zoom = getZoom(patternConfig)
+
     this.gridWidth = fabricCanvas.width / this.cellSize
     this.gridHeight = fabricCanvas.height / this.cellSize
-    this.zoom = getZoom(patternConfig.density)
   }
 }
 
-function getDeviation(patternConfig: PatternConfig) {
-  const { deviation, density } = patternConfig
-  if (deviation <= 0) return 0
-  if (deviation >= density) return density
-  return deviation
+function getDistanceFromGridNodes(patternConfig: PatternConfig) {
+  return patternConfig.deviation / 2 // TODO: it should not be linear
 }
 
-const getMinimumDensity = (density: number) => density * 1
+function getCellSize(patternConfig: PatternConfig) {
+  return patternConfig.density
+}
 
 // dens = 0 -> zoom === minZoom
 // dens = 100 -> zoom === maxZoom
-function getZoom(density: number) {
+function getZoom(datternConfig: PatternConfig) {
   const MIN_ZOOM = 0.2
   const MAX_ZOOM = (MAX_GRID_WIDTH / MIN_CELL_SIZE) * 5
   const MAX_DENSITY = 100
 
   const zoomRange = MAX_ZOOM - MIN_ZOOM
-  return density * (zoomRange / MAX_DENSITY) + MIN_ZOOM
+  return datternConfig.density * (zoomRange / MAX_DENSITY) + MIN_ZOOM
 }

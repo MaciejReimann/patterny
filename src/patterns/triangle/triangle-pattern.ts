@@ -6,6 +6,7 @@ import { TrianglePatternConfig } from "./triangle-pattern-config"
 
 export type { TrianglePatternConfig }
 export class TrianglePattern {
+  prevConfigs: PatternConfig[] = []
   config: TrianglePatternConfig = new TrianglePatternConfig()
   grid: CartesianGrid = new CartesianGrid(
     this.config.cellSize,
@@ -13,27 +14,35 @@ export class TrianglePattern {
     this.config.gridHeight
   )
   triangles: [fabric.Path, fabric.Path][] = this.getTrianglesForGridCells()
+  shouldDrawTriangles: boolean = true
 
   constructor(public fabricCanvas: FabricCanvas) {}
 
   setConfig(config: PatternConfig): void {
+    this.prevConfigs.push(config)
+    this.setShouldDrawTriangles(config)
     this.config.set(config, this.fabricCanvas)
   }
 
   draw() {
     this.fabricCanvas.setZoom(this.config.zoom)
 
-    console.log("distanceFromGridNodes", this.config.distanceFromGridNodes)
-
-    this.fabricCanvas.clear()
-
     this.drawTriangles()
+  }
 
-    // fabricCanvas.renderAll()
+  private setShouldDrawTriangles(config: PatternConfig) {
+    const prevConfig = this.prevConfigs[this.prevConfigs.length - 2]
+    if (!prevConfig) return
+
+    this.shouldDrawTriangles =
+      prevConfig && prevConfig.deviation !== config.deviation
   }
 
   private drawTriangles() {
-    this.triangles = this.getTrianglesForGridCells()
+    if (this.shouldDrawTriangles) {
+      this.fabricCanvas.clear()
+      this.triangles = this.getTrianglesForGridCells()
+    }
 
     this.triangles.forEach((triangle) => {
       triangle && this.fabricCanvas.add(...triangle)
@@ -58,21 +67,29 @@ function getCellsWithRandomisedGridNodes(
   randomness: number
 ): GridCell[] {
   return gridCells.map((cell) => {
-    const randomNumberX = getRandomNumber({ noHigherThan: randomness })
-    const randomNumberY = getRandomNumber({ noHigherThan: randomness })
+    const randomNumber = () => getRandomNumber({ noHigherThan: randomness })
 
     const isOnHorizontalEdge = !cell.getRight() || !cell.getLeft()
     const isOnVerticalEdge = !cell.getTop() || !cell.getBottom()
     const isCornerCell = isOnHorizontalEdge && isOnVerticalEdge
 
-    if (isCornerCell) return cell
-    if (isOnHorizontalEdge) {
-      cell.node = cell.node.add(new fabric.Point(0, randomNumberY))
-    } else if (isOnVerticalEdge) {
-      cell.node = cell.node.add(new fabric.Point(randomNumberX, 0))
-    } else {
-      cell.node = cell.node.add(new fabric.Point(randomNumberX, randomNumberY))
+    const moveNodeOnX = () => {
+      cell.node = cell.getNode().add(new fabric.Point(0, randomNumber()))
     }
+    const moveNodeOnY = () => {
+      cell.node = cell.getNode().add(new fabric.Point(randomNumber(), 0))
+    }
+    const moveNodeOnXY = () => {
+      cell.node = cell
+        .getNode()
+        .add(new fabric.Point(randomNumber(), randomNumber()))
+    }
+
+    if (isCornerCell) return cell
+    else if (isOnHorizontalEdge) moveNodeOnX()
+    else if (isOnVerticalEdge) moveNodeOnY()
+    else moveNodeOnXY()
+
     return cell
   })
 }
