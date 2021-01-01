@@ -3,7 +3,7 @@ import { FabricCanvas } from "../../lib/fabric-wrappers"
 
 const MAX_GRID_WIDTH = 60
 const MAX_GRID_HEIGHT = 60
-const MIN_CELL_SIZE = 50
+const MIN_CELL_SIZE = 60
 
 export class TrianglePatternConfig {
   //number of square cells the canvas is divided horizontally into

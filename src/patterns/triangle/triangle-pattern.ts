@@ -1,5 +1,5 @@
 import { fabric } from "fabric"
-import { FabricCanvas, makeTriangularPath } from "../../lib/fabric-wrappers"
+import { FabricCanvas, makeTriangularPolygon } from "../../lib/fabric-wrappers"
 import { CartesianGrid, GridCell } from "../common/cartesian-grid"
 import { PatternConfig, PatternType } from "../common/pattern"
 import { TrianglePatternConfig } from "./triangle-pattern-config"
@@ -47,6 +47,7 @@ export class TrianglePattern {
     this.triangles.forEach((triangle) => {
       triangle && this.fabricCanvas.add(...triangle)
     })
+    this.fabricCanvas.renderAll()
   }
 
   private getTrianglesForGridCells(): [fabric.Path, fabric.Path][] {
@@ -96,7 +97,7 @@ function getCellsWithRandomisedGridNodes(
 
 function makeTriangularPathsToClosestNodes(
   cell: GridCell
-): [fabric.Path, fabric.Path] | null {
+): [fabric.Polygon, fabric.Polygon] | null {
   const cellToRight = cell.getRight()
   const cellToBottom = cell.getBottom()
 
@@ -110,10 +111,10 @@ function makeTriangularPathsToClosestNodes(
   const apexC = cellToBottomRight.node
   const apexD = cellToBottom.node
 
-  const topRightPath = makeTriangularPath([apexA, apexB, apexC], {
+  const topRightPath = makeTriangularPolygon([apexA, apexB, apexC], {
     fill: "red",
   })
-  const bottomLeftPath = makeTriangularPath([apexA, apexC, apexD], {
+  const bottomLeftPath = makeTriangularPolygon([apexA, apexC, apexD], {
     fill: "green",
   })
 

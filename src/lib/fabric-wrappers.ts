@@ -2,24 +2,18 @@ import { fabric } from "fabric"
 
 export type FabricCanvas = fabric.Canvas
 
-export function makeTriangularPath(
+export function makeTriangularPolygon(
   apices: [fabric.Point, fabric.Point, fabric.Point],
   options: Partial<fabric.Path>
-): fabric.Path {
-  const path = new fabric.Path(
-    `M ${apices[0].x} ${apices[0].y} L ${apices[1].x} ${apices[1].y} L ${apices[2].x} ${apices[2].y} z`
-  )
-
+): fabric.Polygon {
   const fill = typeof options.fill === "string" ? options.fill : undefined
 
   const defaultOptions = {
     selectable: false,
     stroke: fill,
+    objectCaching: false,
   }
-
-  path.set({ ...defaultOptions, ...options })
-
-  return path
+  return new fabric.Polygon(apices, { ...defaultOptions, ...options })
 }
 
 export function makeRect() {

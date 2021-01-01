@@ -21,7 +21,7 @@ export const Canvas = (props: CanvasProps) => {
   useEffect(() => {
     setCanvas(
       new fabric.Canvas(canvasRef.current, {
-        renderOnAddRemove: true,
+        renderOnAddRemove: false,
       })
     )
   }, [setCanvas])
