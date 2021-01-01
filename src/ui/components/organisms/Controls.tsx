@@ -15,8 +15,8 @@ export type PatternTypeDisplayValue = string // tepm - use an enum
 interface PatternParameters {
   width: number
   height: number
-  patternTypes: PatternTypeDisplayValue[]
-  patternType: PatternTypeDisplayValue
+  patternTypes?: PatternTypeDisplayValue[]
+  patternType?: PatternTypeDisplayValue
   cellSize: number
   geometryVariance: number
   shadingIntensity: number
@@ -27,7 +27,7 @@ interface PatternParameters {
 interface ControlsProps extends PatternParameters {
   setWidth: NumberSetter
   setHeight: NumberSetter
-  setPatternType: StringSetter
+  setPatternType?: StringSetter
   setCellSize: NumberSetter
   setGeometryVariance: NumberSetter
   setShadingIntensity: NumberSetter
@@ -78,16 +78,17 @@ export const Controls = (props: ControlsProps) => {
       <div className={styles["pattern-types"]}>
         <label className="label label content is-small">Pattern Types</label>
         <div className={styles["buttons"]}>
-          {patternTypes.map((patternType) => (
-            <div key={patternType}>
-              <Button
-                isClicked={selectedPattern === patternType}
-                label={patternType}
-                onClick={() => setPatternType(patternType)}
-                size={ButtonSizes.Small}
-              />
-            </div>
-          ))}
+          {patternTypes &&
+            patternTypes.map((patternType) => (
+              <div key={patternType}>
+                <Button
+                  isClicked={selectedPattern === patternType}
+                  label={patternType}
+                  onClick={() => setPatternType && setPatternType(patternType)}
+                  size={ButtonSizes.Small}
+                />
+              </div>
+            ))}
         </div>
       </div>
 
