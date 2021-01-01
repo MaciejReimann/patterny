@@ -3,43 +3,64 @@ import { FabricCanvas, makeTriangularPath } from "../../lib/fabric-wrappers"
 import { CartesianGrid, GridCell } from "../common/cartesian-grid"
 import { PatternConfig, PatternType } from "../common/pattern"
 
-type TrianglePatternConfig = {
+export type TrianglePatternConfig = {
+  //number of square cells the canvas is divided horizontally into
   gridWidth: number
+  // number of square cells the canvas is divided vertically into
   gridHeight: number
+  // length of the square cell in pixels
   cellSize: number
-  deviation: number // where 0 is no deviation (regular frid, and 100 is cellSize)
+  // distance of visible pattern nodes to grid nodes
+  // where 0 is no deviation (regular frid), and 100 is distance equal to cellSize
+  distanceFromGridNodes: number
+  zoom: number
 }
 
-export class TrianglePattern implements PatternType {
-  config: PatternConfig
+export class TrianglePattern {
+  fabricCanvas: FabricCanvas
+  config: TrianglePatternConfig
+  triangles: ([fabric.Path, fabric.Path] | null)[]
 
-  constructor(config: PatternConfig) {
-    this.config = config
+  constructor(fabricCanvas: FabricCanvas) {
+    this.fabricCanvas = fabricCanvas
+    this.config = getDefaultTrianglePatternConfig()
+    this.triangles = this.getTriangles().filter((cell) => cell !== null)
+
+    this.triangles.forEach((triangle) => {
+      // console.log(triangle)
+      triangle && fabricCanvas.add(...triangle)
+    })
   }
 
-  setConfig(config: PatternConfig): void {
-    this.config = config
+  // setConfig(config: PatternConfig): void {
+  //   this.config = adaptTrianglePatternConfig(config, this.fabricCanvas)
+  //   console.log("TrianglePattern.setConfig()", this.config)
+  // }
+
+  draw(fabricCanvas: FabricCanvas, config: PatternConfig) {
+    this.config = adaptTrianglePatternConfig(config, this.fabricCanvas)
+    const zoom = this.config.zoom
+    fabricCanvas.setZoom(zoom)
   }
 
-  draw(fabricCanvas: FabricCanvas) {
+  private getTriangles() {
     const {
       cellSize,
-      deviation,
+      distanceFromGridNodes,
       gridWidth,
       gridHeight,
-    } = adaptTrianglePatternConfig(this.config, fabricCanvas)
+    } = this.config
 
     const cartesianGrid = new CartesianGrid(cellSize, gridWidth, gridHeight)
     const gridCells = cartesianGrid.getCells()
+
     const randomisedCells = getCellsWithRandomisedGridNodes(
       gridCells,
-      deviation
+      distanceFromGridNodes
     )
-
-    randomisedCells.forEach((cell) => {
-      const triangles = makeTriangularPathsToClosestNodes(cell)
-      triangles && fabricCanvas.add(...triangles)
-    })
+    return randomisedCells.map((cell) =>
+      makeTriangularPathsToClosestNodes(cell)
+    )
   }
 }
 
@@ -50,16 +71,47 @@ function getDeviation(patternConfig: PatternConfig) {
   return deviation
 }
 
+const MAX_CANVAS_WIDTH = 60
+const MAX_CANVAS_HEIGHT = 60
+
+const MIN_CELL_SIZE = 50
+
+function getDefaultTrianglePatternConfig(): TrianglePatternConfig {
+  const cellSize = MIN_CELL_SIZE
+  const gridWidth = MAX_CANVAS_WIDTH
+  const gridHeight = MAX_CANVAS_HEIGHT
+  const distanceFromGridNodes = 0
+  const zoom = 1
+
+  return { cellSize, gridWidth, gridHeight, distanceFromGridNodes, zoom }
+}
+
+const getMinimumDensity = (density: number) => density * 1
+
 function adaptTrianglePatternConfig(
   patternConfig: PatternConfig,
   fabricCanvas: any
 ): TrianglePatternConfig {
-  const cellSize = patternConfig.density // temp
-  const deviation = getDeviation(patternConfig)
+  const cellSize = getMinimumDensity(patternConfig.density) // temp
+  const distanceFromGridNodes = getDeviation(patternConfig)
   const gridWidth = fabricCanvas.width / cellSize
   const gridHeight = fabricCanvas.height / cellSize
+  const zoom = getZoom(patternConfig.density)
 
-  return { cellSize, gridWidth, gridHeight, deviation }
+  return { cellSize, gridWidth, gridHeight, distanceFromGridNodes, zoom }
+}
+
+const MAX_DENSITY = 100
+
+const MIN_ZOOM = 0.2
+const MAX_ZOOM = (MAX_CANVAS_WIDTH / MIN_CELL_SIZE) * 5
+
+// dens = 0 -> zoom === minZoom
+// dens = 100 -> zoom === maxZoom
+function getZoom(density: number) {
+  console.log("getZoom density", density)
+  const zoomRange = MAX_ZOOM - MIN_ZOOM
+  return density * (zoomRange / MAX_DENSITY) + MIN_ZOOM
 }
 
 function getCellsWithRandomisedGridNodes(

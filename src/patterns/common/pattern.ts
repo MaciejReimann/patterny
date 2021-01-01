@@ -1,9 +1,12 @@
 import { FabricCanvas } from "../../lib/fabric-wrappers"
-import { TrianglePattern } from "../triangle/triangle-pattern"
+import {
+  TrianglePattern,
+  TrianglePatternConfig,
+} from "../triangle/triangle-pattern"
 export interface PatternType {
-  config: PatternConfig
-  setConfig: (patternConfig: PatternConfig) => void
-  draw: (fabricCanvas: FabricCanvas) => void
+  // config: TrianglePatternConfig
+  // setConfig: (patternConfig: PatternConfig) => void
+  draw: (fabricCanvas: FabricCanvas, config: PatternConfig) => void
 }
 
 export enum PatternName {
@@ -16,26 +19,25 @@ export type PatternConfig = {
   shouldClearOnRender: boolean
 }
 
-export class Pattern {
+export class PatternFacade {
   type: PatternType
+  fabricCanvas: FabricCanvas
 
-  constructor(patternName: PatternName) {
-    this.type = PatternFactory(patternName, defaultPatternConfig)
+  constructor(fabricCanvas: FabricCanvas, patternName: PatternName) {
+    // this.config = defaultPatternConfig
+    this.type = PatternFactory(patternName, fabricCanvas)
+    this.fabricCanvas = fabricCanvas
     console.log("Pattern initialised")
   }
 
-  setConfig(config: PatternConfig) {
-    this.type.setConfig(config)
-  }
-
-  // TODO: this needs to be implemented differently
-  // setType = (pattern: PatternType) => {
-  //   this.pattern = pattern
+  // setConfig(config: PatternConfig) {
+  //   this.config = config
+  //   this.type.setConfig(config)
   // }
 
-  draw(fabricCanvas: FabricCanvas) {
-    if (this.type.config.shouldClearOnRender) this.clearCanvas(fabricCanvas)
-    this.type.draw(fabricCanvas)
+  draw(config: PatternConfig) {
+    // if (config.shouldClearOnRender) this.clearCanvas(this.fabricCanvas)
+    this.type.draw(this.fabricCanvas, config)
   }
 
   private clearCanvas = (fabricCanvas: FabricCanvas) => {
@@ -45,18 +47,19 @@ export class Pattern {
 
 function PatternFactory(
   patternName: PatternName,
-  config: PatternConfig
+  // config: PatternConfig,
+  fabricCanvas: FabricCanvas
 ): PatternType {
   switch (patternName) {
     case PatternName.Trangle:
-      return new TrianglePattern(config)
+      return new TrianglePattern(fabricCanvas)
     default:
       throw new Error(`No pattern name defined for ${patternName}`)
   }
 }
 
-const defaultPatternConfig = {
-  density: 50,
-  deviation: 50,
-  shouldClearOnRender: true,
-}
+// const defaultPatternConfig = {
+//   density: 50,
+//   deviation: 50,
+//   shouldClearOnRender: true,
+// }

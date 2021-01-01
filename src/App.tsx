@@ -1,21 +1,29 @@
 import React, { useState, useEffect, useMemo } from "react"
 
 import { FabricCanvas } from "./lib/fabric-wrappers"
-import { Pattern, PatternName, PatternConfig } from "./patterns/common/pattern"
+import {
+  PatternFacade,
+  PatternName,
+  PatternConfig,
+} from "./patterns/common/pattern"
 import { Arabesque } from "./patterns/arabesque/Arabesque"
 
 import { Canvas } from "./components/canvas/Canvas"
 
 export const App = () => {
-  const [fabricCanvas, setFabricCanvas] = useState<FabricCanvas | null>()
+  const [fabricCanvas, setFabricCanvas] = useState<FabricCanvas | null>(null)
 
-  const [pattern, setPattern] = useState<Pattern>(
-    new Pattern(PatternName.Trangle)
-  )
-  const [density, setDensity] = useState<number>(pattern.type.config.density)
-  const [deviation, setDeviation] = useState<number>(
-    pattern.type.config.deviation
-  )
+  const [density, setDensity] = useState<number>(50)
+  const [deviation, setDeviation] = useState<number>(50)
+
+  const [pattern, setPattern] = useState<PatternFacade | null>(null)
+
+  useEffect(() => {
+    if (fabricCanvas) {
+      const pattern = new PatternFacade(fabricCanvas, PatternName.Trangle)
+      setPattern(pattern)
+    }
+  }, [fabricCanvas])
 
   const patternConfig = useMemo(() => {
     const patternConfig: PatternConfig = {
@@ -23,11 +31,8 @@ export const App = () => {
       deviation,
       shouldClearOnRender: true,
     }
-
     return patternConfig
   }, [density, deviation])
-
-  pattern && pattern.setConfig(patternConfig)
 
   const handleDensityChange = (v: number) => {
     setDensity(v)
@@ -39,7 +44,7 @@ export const App = () => {
 
   useEffect(() => {
     if (fabricCanvas && pattern) {
-      pattern.draw(fabricCanvas)
+      pattern.draw(patternConfig)
     }
   }, [fabricCanvas, pattern, patternConfig])
 
@@ -48,6 +53,7 @@ export const App = () => {
       <div>Current density: {density}</div>
       <Canvas width={600} height={600} setCanvas={setFabricCanvas} />
       <div>
+        <button onClick={() => handleDensityChange(0)}> Density 0</button>
         <button onClick={() => handleDensityChange(20)}> Density 20</button>
         <button onClick={() => handleDensityChange(50)}>Density 50</button>
         <button onClick={() => handleDensityChange(100)}>Density 100</button>
