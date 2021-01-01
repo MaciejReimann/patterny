@@ -5,8 +5,8 @@ import {
 } from "../triangle/triangle-pattern"
 export interface PatternType {
   // config: TrianglePatternConfig
-  // setConfig: (patternConfig: PatternConfig) => void
-  draw: (fabricCanvas: FabricCanvas, config: PatternConfig) => void
+  setConfig: (patternConfig: PatternConfig) => void
+  draw: () => void
 }
 
 export enum PatternName {
@@ -24,24 +24,14 @@ export class PatternFacade {
   fabricCanvas: FabricCanvas
 
   constructor(fabricCanvas: FabricCanvas, patternName: PatternName) {
-    // this.config = defaultPatternConfig
     this.type = PatternFactory(patternName, fabricCanvas)
     this.fabricCanvas = fabricCanvas
-    console.log("Pattern initialised")
+    console.log("PatternFacade initialised")
   }
-
-  // setConfig(config: PatternConfig) {
-  //   this.config = config
-  //   this.type.setConfig(config)
-  // }
 
   draw(config: PatternConfig) {
-    // if (config.shouldClearOnRender) this.clearCanvas(this.fabricCanvas)
-    this.type.draw(this.fabricCanvas, config)
-  }
-
-  private clearCanvas = (fabricCanvas: FabricCanvas) => {
-    fabricCanvas.clear()
+    this.type.setConfig(config)
+    this.type.draw()
   }
 }
 
@@ -57,9 +47,3 @@ function PatternFactory(
       throw new Error(`No pattern name defined for ${patternName}`)
   }
 }
-
-// const defaultPatternConfig = {
-//   density: 50,
-//   deviation: 50,
-//   shouldClearOnRender: true,
-// }
