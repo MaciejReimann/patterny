@@ -50,9 +50,10 @@ export function App() {
       density: cellSize,
       deviation: geometryVariance,
       shouldClearOnRender: true,
+      colorPalette: colorPalette,
     }
     return patternConfig
-  }, [cellSize, geometryVariance])
+  }, [cellSize, geometryVariance, colorPalette])
 
   useEffect(() => {
     if (fabricCanvas && pattern) {

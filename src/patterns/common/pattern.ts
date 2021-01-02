@@ -3,8 +3,9 @@ import {
   TrianglePattern,
   TrianglePatternConfig,
 } from "../triangle/triangle-pattern"
+import { ColorPalette } from "../../ui/utils/color-palettes/color-palettes"
 export interface PatternType {
-  // config: TrianglePatternConfig
+  config: TrianglePatternConfig
   setConfig: (patternConfig: PatternConfig) => void
   draw: () => void
 }
@@ -17,16 +18,20 @@ export type PatternConfig = {
   density: number
   deviation: number
   shouldClearOnRender: boolean
+  colorPalette: ColorPalette
 }
 
 export class PatternFacade {
   type: PatternType
+  /**
+   * We may need acces to fabricCanvas to methods shared by all patterns
+   * like serialization (for exporting into file) or other provided by Fabric canvas API
+   */
   fabricCanvas: FabricCanvas
 
   constructor(fabricCanvas: FabricCanvas, patternName: PatternName) {
     this.type = PatternFactory(patternName, fabricCanvas)
     this.fabricCanvas = fabricCanvas
-    console.log("PatternFacade initialised")
   }
 
   draw(config: PatternConfig) {

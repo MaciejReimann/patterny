@@ -56,7 +56,7 @@ export const Controls = (props: ControlsProps) => {
 
   const selectedPattern = patternType
 
-  console.log("colorPalette", colorPalette)
+  // console.log("colorPalette", colorPalette)
 
   return (
     <div className={styles.wrapper}>

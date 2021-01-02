@@ -3,7 +3,7 @@ import { FabricCanvas } from "../../lib/fabric-wrappers"
 
 const MAX_GRID_WIDTH = 60
 const MAX_GRID_HEIGHT = 60
-const MIN_CELL_SIZE = 60
+const MIN_CELL_SIZE = 80
 
 export class TrianglePatternConfig {
   //number of square cells the canvas is divided horizontally into
@@ -17,18 +17,18 @@ export class TrianglePatternConfig {
   distanceFromGridNodes: number = 0
   zoom: number = 1
 
-  set(patternConfig: PatternConfig, fabricCanvas: any) {
+  set(patternConfig: PatternConfig, fabricCanvas: FabricCanvas) {
     this.cellSize = getCellSize(patternConfig)
     this.distanceFromGridNodes = getDistanceFromGridNodes(patternConfig)
     this.zoom = getZoom(patternConfig)
 
-    this.gridWidth = fabricCanvas.width / this.cellSize
-    this.gridHeight = fabricCanvas.height / this.cellSize
+    this.gridWidth = fabricCanvas.getWidth() / this.cellSize
+    this.gridHeight = fabricCanvas.getHeight() / this.cellSize
   }
 }
 
 function getDistanceFromGridNodes(patternConfig: PatternConfig) {
-  return patternConfig.deviation / 2 // TODO: it should not be linear
+  return patternConfig.deviation / 2 // TODO: it should not be linear + rename into geometry variance
 }
 
 function getCellSize(patternConfig: PatternConfig) {
@@ -37,11 +37,11 @@ function getCellSize(patternConfig: PatternConfig) {
 
 // dens = 0 -> zoom === minZoom
 // dens = 100 -> zoom === maxZoom
-function getZoom(datternConfig: PatternConfig) {
+function getZoom(patternConfig: PatternConfig) {
   const MIN_ZOOM = 0.2
   const MAX_ZOOM = (MAX_GRID_WIDTH / MIN_CELL_SIZE) * 5
   const MAX_DENSITY = 100
 
   const zoomRange = MAX_ZOOM - MIN_ZOOM
-  return datternConfig.density * (zoomRange / MAX_DENSITY) + MIN_ZOOM
+  return patternConfig.density * (zoomRange / MAX_DENSITY) + MIN_ZOOM
 }
